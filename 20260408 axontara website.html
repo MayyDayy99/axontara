@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AXONTARA — AI-Driven Professional Tools for BIM & Geospatial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────── */
+:root {
+  --ink:    #0a0a0f;
+  --paper:  #f5f2eb;
+  --accent: #c8f542;
+  --accent2:#1a3aff;
+  --terra:  #e87b3a;   /* Click2TERRA warm orange */
+  --slim:   #3acfe8;   /* Click2SLIM cyan */
+  --muted:  #6b6b72;
+  --border: rgba(10,10,15,0.11);
+  --card:   rgba(255,255,255,0.62);
+  --nav-h:  72px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Instrument Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* grain */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999; opacity: 0.35;
+}
+
+/* ─────────────────────────────────────────
+   NAV
+───────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(20px,5vw,72px);
+  background: rgba(245,242,235,0.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  z-index: 1000;
+}
+
+.logo {
+  font-family: 'DM Mono', monospace;
+  font-weight: 500; font-size: 16px;
+  letter-spacing: 0.1em;
+  color: var(--ink); text-decoration: none;
+  display: flex; align-items: center; gap: 10px;
+}
+.logo-dot {
+  width: 8px; height: 8px;
+  background: var(--accent2);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.nav-links {
+  display: flex; align-items: center; gap: 8px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  padding: 8px 14px; border-radius: 4px;
+  transition: color .2s, background .2s;
+}
+.nav-links a:hover { color: var(--ink); background: rgba(10,10,15,0.05); }
+
+.nav-cta {
+  background: var(--ink) !important;
+  color: var(--paper) !important;
+  border-radius: 4px;
+}
+.nav-cta:hover { background: var(--accent2) !important; color: var(--paper) !important; }
+
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+}
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  padding: var(--nav-h) clamp(20px,5vw,72px) 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  position: relative; overflow: hidden;
+}
+
+/* blueprint grid */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(26,58,255,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,58,255,0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+}
+
+/* large decorative word */
+.hero-bg-word {
+  position: absolute;
+  left: 50%; bottom: -4vw;
+  transform: translateX(-50%);
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(80px,16vw,220px);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(26,58,255,0.07);
+  pointer-events: none; user-select: none; white-space: nowrap;
+}
+
+.hero-inner {
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: flex-start;
+  padding: 80px 0 40px;
+  position: relative; z-index: 10;
+  max-width: 860px;
+}
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--accent2); margin-bottom: 28px;
+  opacity: 0; animation: fadeUp .8s ease forwards .2s;
+}
+.eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--accent2); }
+
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(46px,8.5vw,118px);
+  line-height: 1.05; letter-spacing: -0.025em;
+  margin-bottom: 32px;
+  opacity: 0; animation: fadeUp .9s ease forwards .35s;
+}
+.hero h1 em   { font-style: italic; color: var(--accent2); }
+.hero h1 mark {
+  background: var(--accent); color: var(--ink);
+  padding: 2px 14px 6px; border-radius: 4px;
+  font-style: normal; display: inline-block; line-height: 1.1;
+  margin-top: 4px;
+}
+
+.hero-sub {
+  font-size: clamp(16px,2vw,20px); line-height: 1.65;
+  color: var(--muted); max-width: 540px; margin-bottom: 48px;
+  opacity: 0; animation: fadeUp .9s ease forwards .5s;
+}
+
+.hero-cta {
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp .9s ease forwards .65s;
+}
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--ink); color: var(--paper);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 15px; font-weight: 600;
+  padding: 15px 30px; border-radius: 4px;
+  text-decoration: none; letter-spacing: .01em;
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(10,10,15,.18); }
+.btn-ghost {
+  font-family: 'DM Mono', monospace; font-size: 13px;
+  letter-spacing: .06em; color: var(--muted); text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 2px; transition: color .2s, border-color .2s;
+}
+.btn-ghost:hover { color: var(--ink); border-color: var(--ink); }
+
+.hero-bottom {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding: 28px 0; border-top: 1px solid var(--border);
+  position: relative; z-index: 10;
+  flex-wrap: wrap; gap: 16px;
+  opacity: 0; animation: fadeUp .9s ease forwards .8s;
+}
+.stat-row { display: flex; gap: clamp(20px,5vw,60px); flex-wrap: wrap; }
+.stat { display: flex; flex-direction: column; gap: 2px; }
+.stat-value {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(22px,3.5vw,40px); line-height: 1;
+}
+.stat-label {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+}
+
+.badge-stack {
+  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+}
+.badge {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--muted); background: rgba(255,255,255,.5);
+}
+.badge.live { border-color: var(--accent); color: #3a6600; background: rgba(200,245,66,.15); }
+
+/* ─────────────────────────────────────────
+   SECTION UTILITY
+───────────────────────────────────────── */
+.section { padding: clamp(64px,10vw,120px) clamp(20px,5vw,72px); }
+
+.section-label {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 48px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--border); max-width: 200px;
+}
+
+/* ─────────────────────────────────────────
+   PRODUCTS
+───────────────────────────────────────── */
+.products-intro {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 64px; align-items: end; margin-bottom: 72px;
+}
+@media (max-width: 768px) { .products-intro { grid-template-columns: 1fr; gap: 24px; } }
+
+.products-intro h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(36px,6vw,76px); line-height: .95;
+  letter-spacing: -0.02em;
+}
+.products-intro h2 em { font-style: italic; color: var(--accent2); }
+
+.products-intro p {
+  font-size: 16px; line-height: 1.7; color: var(--muted);
+  padding-top: 8px;
+}
+
+/* product cards */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border);
+}
+@media (max-width: 900px)  { .product-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px)  { .product-grid { grid-template-columns: 1fr; } }
+
+.product-card {
+  background: var(--paper);
+  padding: 48px 36px 40px;
+  display: flex; flex-direction: column;
+  transition: background .3s;
+  position: relative; overflow: hidden;
+  text-decoration: none; color: inherit;
+}
+.product-card:hover { background: #fff; }
+
+/* accent top bar */
+.product-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: var(--card-accent, var(--accent2));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .4s ease;
+}
+.product-card:hover::before { transform: scaleX(1); }
+
+.product-card[data-product="bim"]   { --card-accent: var(--accent2); }
+.product-card[data-product="terra"] { --card-accent: var(--terra); }
+.product-card[data-product="slim"]  { --card-accent: var(--slim); }
+
+.prod-tag {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: .14em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 20px;
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-bottom: 36px; align-self: flex-start;
+  border: 1px solid currentColor;
+}
+.prod-tag.bim   { color: var(--accent2); background: rgba(26,58,255,.07); }
+.prod-tag.terra { color: var(--terra);   background: rgba(232,123,58,.07); }
+.prod-tag.slim  { color: var(--slim);    background: rgba(58,207,232,.07); }
+
+.prod-tag::before {
+  content: ''; width: 6px; height: 6px;
+  border-radius: 50%; background: currentColor;
+}
+
+.prod-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(32px,4vw,52px); line-height: 1;
+  letter-spacing: -0.02em; margin-bottom: 8px;
+}
+.prod-name span { color: var(--accent2); }
+.prod-name.terra span { color: var(--terra); }
+.prod-name.slim  span { color: var(--slim); }
+
+.prod-tagline {
+  font-family: 'DM Serif Display', serif; font-style: italic;
+  font-size: 16px; color: var(--muted); margin-bottom: 24px;
+}
+
+.prod-desc {
+  font-size: 14px; line-height: 1.75; color: var(--muted);
+  margin-bottom: 36px; flex: 1;
+}
+
+.prod-features {
+  list-style: none; display: flex;
+  flex-direction: column; gap: 9px; margin-bottom: 36px;
+}
+.prod-features li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13px; color: rgba(10,10,15,.7); line-height: 1.5;
+}
+.prod-features li::before {
+  content: '→';
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: var(--card-accent); flex-shrink: 0; margin-top: 1px;
+}
+
+.prod-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'DM Mono', monospace; font-size: 12px;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--card-accent); text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 1px;
+  transition: border-color .2s, gap .2s;
+  align-self: flex-start;
+}
+.prod-link:hover { border-color: var(--card-accent); gap: 12px; }
+
+/* ─────────────────────────────────────────
+   SLIM INCLUDED BANNER
+───────────────────────────────────────── */
+.slim-banner {
+  margin-top: 32px;
+  background: rgba(58,207,232,.08);
+  border: 1px solid rgba(58,207,232,.25);
+  border-radius: 6px;
+  padding: 20px 28px;
+  display: flex; align-items: center; gap: 16px;
+  flex-wrap: wrap;
+}
+.slim-banner-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(58,207,232,.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.slim-banner p {
+  font-size: 14px; color: var(--muted); line-height: 1.6;
+}
+.slim-banner strong { color: var(--ink); }
+
+/* ─────────────────────────────────────────
+   HOW IT WORKS (BIM Pipeline)
+───────────────────────────────────────── */
+.pipeline-section {
+  background: var(--ink); color: var(--paper);
+  padding: clamp(64px,10vw,120px) clamp(20px,5vw,72px);
+  position: relative; overflow: hidden;
+}
+.pipeline-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(200,245,66,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,245,66,.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.pipeline-section .section-label { color: rgba(245,242,235,.4); }
+.pipeline-section .section-label::after { background: rgba(245,242,235,.12); }
+
+.pipeline-section h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(36px,6vw,72px);
+  line-height: 1; letter-spacing: -.02em;
+  margin-bottom: 16px; position: relative;
+}
+.pipeline-section h2 em { font-style: italic; color: var(--accent); }
+
+.pipeline-intro {
+  font-size: 16px; color: rgba(245,242,235,.55);
+  max-width: 480px; line-height: 1.7; margin-bottom: 64px;
+}
+
+.pipeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  position: relative;
+}
+
+/* connecting line */
+.pipeline::before {
+  content: '';
+  position: absolute;
+  top: 36px; left: 0; right: 0; height: 1px;
+  background: rgba(200,245,66,.2);
+}
+
+.pipeline-step {
+  padding: 0 24px 40px 0;
+  position: relative;
+}
+
+.step-num {
+  width: 72px; height: 72px;
+  border: 1px solid rgba(200,245,66,.3);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; font-size: 14px;
+  color: var(--accent); margin-bottom: 28px;
+  position: relative; background: var(--ink);
+  flex-shrink: 0;
+}
+
+.step-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px; margin-bottom: 10px; color: var(--paper);
+}
+.step-desc { font-size: 13px; color: rgba(245,242,235,.5); line-height: 1.65; }
+.step-tag {
+  display: inline-block; margin-top: 14px;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 20px;
+  background: rgba(200,245,66,.15); color: var(--accent);
+}
+
+/* ─────────────────────────────────────────
+   MARKETS
+───────────────────────────────────────── */
+.markets-section { padding: clamp(64px,10vw,120px) clamp(20px,5vw,72px); background: #fff; }
+
+.markets-section h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(36px,5vw,64px); line-height: 1;
+  letter-spacing: -.02em; margin-bottom: 12px;
+}
+.markets-section h2 em { font-style: italic; color: var(--accent2); }
+
+.markets-intro {
+  font-size: 16px; color: var(--muted); max-width: 520px;
+  line-height: 1.7; margin-bottom: 56px;
+}
+
+.who-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+.who-card {
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 28px; transition: border-color .2s, transform .2s;
+  cursor: default;
+}
+.who-card:hover { border-color: var(--accent2); transform: translateY(-4px); }
+.who-icon {
+  width: 42px; height: 42px;
+  background: rgba(26,58,255,.07); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; margin-bottom: 16px;
+}
+.who-title {
+  font-family: 'DM Serif Display', serif; font-size: 20px; margin-bottom: 8px;
+}
+.who-desc { font-size: 13px; line-height: 1.7; color: var(--muted); }
+
+/* ─────────────────────────────────────────
+   FOUNDING 100 CTA
+───────────────────────────────────────── */
+.founding-section {
+  padding: clamp(64px,10vw,120px) clamp(20px,5vw,72px);
+  background: var(--ink); color: var(--paper);
+  position: relative; overflow: hidden;
+}
+.founding-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(200,245,66,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,245,66,.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+.founding-bg-num {
+  position: absolute; right: -1vw; top: 50%;
+  transform: translateY(-50%);
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(140px,24vw,360px); line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(200,245,66,.07);
+  pointer-events: none; user-select: none; white-space: nowrap;
+}
+
+.founding-inner {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center; position: relative;
+}
+@media (max-width: 768px) { .founding-inner { grid-template-columns: 1fr; gap: 48px; } }
+
+.founding-inner h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(40px,6.5vw,84px); line-height: .95;
+  letter-spacing: -.025em; margin-bottom: 20px;
+}
+.founding-inner h2 em { font-style: italic; color: var(--accent); }
+.founding-inner p { font-size: 16px; line-height: 1.7; color: rgba(245,242,235,.55); }
+
+/* offer card */
+.offer-card {
+  background: rgba(245,242,235,.06);
+  border: 1px solid rgba(245,242,235,.12);
+  border-radius: 8px; padding: 40px;
+  position: relative; overflow: hidden;
+}
+.offer-card-ribbon {
+  position: absolute; top: 18px; right: -32px;
+  transform: rotate(45deg);
+  background: var(--accent); color: var(--ink);
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  font-weight: 500; letter-spacing: .1em;
+  padding: 5px 48px;
+}
+
+.price-block { margin-bottom: 28px; }
+.price-was {
+  font-family: 'DM Mono', monospace; font-size: 12px;
+  color: rgba(245,242,235,.3); text-decoration: line-through; margin-bottom: 4px;
+}
+.price-now {
+  font-family: 'DM Serif Display', serif;
+  font-size: 64px; line-height: 1; color: var(--accent);
+}
+.price-period {
+  font-family: 'DM Mono', monospace; font-size: 12px;
+  color: rgba(245,242,235,.4); margin-top: 4px;
+}
+
+.offer-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+.offer-features li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px; color: rgba(245,242,235,.75); line-height: 1.5;
+}
+.offer-features li::before {
+  content: '✓'; font-family: 'DM Mono', monospace; font-size: 12px;
+  color: var(--accent); flex-shrink: 0; margin-top: 1px;
+}
+
+.btn-offer {
+  display: block; width: 100%;
+  background: var(--accent); color: var(--ink);
+  font-family: 'Instrument Sans', sans-serif;
+  font-weight: 600; font-size: 16px;
+  padding: 17px 32px; border-radius: 4px;
+  text-decoration: none; text-align: center;
+  letter-spacing: .02em;
+  transition: transform .2s, box-shadow .2s;
+}
+.btn-offer:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(200,245,66,.25); }
+
+.seats-note {
+  text-align: center;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: rgba(245,242,235,.3); margin-top: 14px;
+}
+
+/* ─────────────────────────────────────────
+   ABOUT AXONTARA
+───────────────────────────────────────── */
+.about-section {
+  padding: clamp(64px,10vw,120px) clamp(20px,5vw,72px);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+@media (max-width: 768px) { .about-section { grid-template-columns: 1fr; gap: 40px; } }
+
+.about-section h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(36px,5vw,64px); line-height: 1;
+  letter-spacing: -.02em; margin-bottom: 24px;
+}
+.about-section h2 em { font-style: italic; color: var(--accent2); }
+.about-section p { font-size: 15px; line-height: 1.8; color: var(--muted); margin-bottom: 20px; }
+
+.about-meta {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 12px;
+}
+.meta-item { border-top: 1px solid var(--border); padding-top: 16px; }
+.meta-value {
+  font-family: 'DM Serif Display', serif; font-size: 32px;
+  color: var(--ink); margin-bottom: 4px;
+}
+.meta-label {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+}
+
+/* right col visual */
+.about-visual {
+  aspect-ratio: 1; max-height: 520px;
+  background: var(--ink); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.about-visual::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(26,58,255,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,58,255,.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.about-visual-text {
+  font-family: 'DM Serif Display', serif; font-style: italic;
+  font-size: clamp(40px,7vw,96px); color: transparent;
+  -webkit-text-stroke: 1px rgba(200,245,66,.4);
+  line-height: 1; text-align: center;
+  position: relative; z-index: 2;
+}
+.about-visual-sub {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(200,245,66,.4); margin-top: 8px;
+  text-align: center; position: relative; z-index: 2;
+}
+
+/* ─────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────── */
+footer {
+  padding: 40px clamp(20px,5vw,72px);
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between;
+  align-items: center; flex-wrap: wrap; gap: 16px;
+}
+.footer-logo {
+  font-family: 'DM Mono', monospace; font-weight: 500;
+  font-size: 14px; letter-spacing: .08em; color: var(--ink);
+  display: flex; align-items: center; gap: 8px;
+}
+.footer-logo .dot { width: 7px; height: 7px; background: var(--accent2); border-radius: 50%; }
+.footer-links {
+  display: flex; gap: 24px; list-style: none; flex-wrap: wrap;
+}
+.footer-links a {
+  font-family: 'DM Mono', monospace; font-size: 12px;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  transition: color .2s;
+}
+.footer-links a:hover { color: var(--ink); }
+.footer-note {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: var(--muted); letter-spacing: .05em;
+}
+
+/* ─────────────────────────────────────────
+   ANIMATIONS & REVEAL
+───────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .5; transform: scale(.85); }
+}
+
+.{
+  opacity: 0; transform: translateY(28px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* divider */
+.divider { height: 1px; background: var(--border); }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-dot"></div>
+    AXONTARA
+  </a>
+  <ul class="nav-links">
+    <li><a href="#products">Products</a></li>
+    <li><a href="#how-it-works">How it works</a></li>
+    <li><a href="#who">Markets</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#founding" class="nav-cta">Founding 100</a></li>
+  </ul>
+</nav>
+
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg-word">AXONTARA</div>
+
+  <div class="hero-inner">
+    <div class="eyebrow">AI-Driven Professional BIM &amp; Geospatial Tools</div>
+    <h1>
+      Reality captured.<br>
+      <em>Intelligence</em><br>
+      <mark>applied.</mark>
+    </h1>
+    <p class="hero-sub">
+      AXONTARA builds the tools that transform raw point cloud data into structured, intelligent building models — automating the hardest parts of BIM, terrain, and geospatial workflows.
+    </p>
+    <div class="hero-cta">
+      <a href="#products" class="btn-primary">Explore our products <span>→</span></a>
+      <a href="#founding" class="btn-ghost">Join the Founding 100</a>
+    </div>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="stat-row">
+      <div class="stat">
+        <span class="stat-value">80%</span>
+        <span class="stat-label">Cost reduction</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">24h</span>
+        <span class="stat-label">Scan to BIM</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">&lt; 1cm</span>
+        <span class="stat-label">Geometric precision</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">3</span>
+        <span class="stat-label">Integrated platforms</span>
+      </div>
+    </div>
+    <div class="badge-stack">
+      <div class="badge live">Alpha · April 2026</div>
+      <div class="badge">Budapest, EU</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── PRODUCTS ── -->
+<section class="section" id="products">
+  <div class="section-label">Click2 Platform Suite</div>
+
+  <div class="products-intro">
+    <h2>Three platforms.<br><em>One pipeline.</em></h2>
+    <p>
+      The Click2 suite covers the complete professional workflow — from raw point cloud data to fully attributed BIM and geospatial deliverables. Every product is built for the European AEC and GIS market, and every registered company account includes Click2SLIM at no extra cost.
+    </p>
+  </div>
+
+  <div class="product-grid">
+
+    <!-- Click2BIM -->
+    <a class="product-card" data-product="bim" href="https://www.click2bim.com">
+      <div class="prod-tag bim">AI Scan-to-BIM</div>
+      <div class="prod-name">Click2<span>BIM</span></div>
+      <div class="prod-tagline">Scan it. Click it. Model done.</div>
+      <p class="prod-desc">
+        Upload a professional Leica or Faro point cloud. Our AI pipeline performs full semantic segmentation and parametric BIM extraction — delivering IFC-compliant models in hours, not weeks.
+      </p>
+      <ul class="prod-features">
+        <li>Automated semantic segmentation of walls, floors, ceilings, doors &amp; windows</li>
+        <li>Parametric BIM object extraction at LOD 300+</li>
+        <li>IFC, DXF, DWG, RVT, ArchiCAD export formats</li>
+        <li>Usage-based pricing — pay per m², no subscription</li>
+        <li>QA deviation maps and automated clash reporting</li>
+      </ul>
+      <span class="prod-link">Learn more →</span>
+    </a>
+
+    <!-- Click2TERRA -->
+    <a class="product-card" data-product="terra" href="https://www.click2terra.com">
+      <div class="prod-tag terra">Geospatial / Terrain BIM</div>
+      <div class="prod-name terra">Click2<span style="color:var(--terra)">TERRA</span></div>
+      <div class="prod-tagline">The landscape, fully modelled.</div>
+      <p class="prod-desc">
+        Purpose-built for terrain and geospatial BIM workflows. Click2TERRA turns aerial, drone, and terrestrial scan data into rich, georeferenced terrain models and infrastructure deliverables — consultant-led, precision-driven.
+      </p>
+      <ul class="prod-features" style="--card-accent: var(--terra)">
+        <li>Georeferenced terrain BIM from aerial &amp; drone LiDAR</li>
+        <li>Infrastructure-grade surface modelling</li>
+        <li>GIS integration: coordinate system transformation &amp; export</li>
+        <li>Consultant-led delivery with quality assurance</li>
+        <li>Seamless handoff to Click2BIM for building-level detail</li>
+      </ul>
+      <span class="prod-link" style="color: var(--terra)">Learn more →</span>
+    </a>
+
+    <!-- Click2SLIM -->
+    <a class="product-card" data-product="slim" href="#products">
+      <div class="prod-tag slim">Point Cloud Intelligence</div>
+      <div class="prod-name slim">Click2<span style="color:var(--slim)">SLIM</span></div>
+      <div class="prod-tagline">Smarter data. Smaller files.</div>
+      <p class="prod-desc">
+        Intelligent point cloud downsampling and compression for professional scan data. Click2SLIM dramatically reduces file sizes while preserving geometric accuracy — accelerating every stage of your BIM and geospatial pipeline.
+      </p>
+      <ul class="prod-features" style="--card-accent: var(--slim)">
+        <li>AI-guided adaptive downsampling — preserve key geometry</li>
+        <li>Up to 95% file size reduction without quality loss</li>
+        <li>Compatible with Leica, Faro, Trimble, DJI formats</li>
+        <li>Pre-processing for Click2BIM and Click2TERRA pipelines</li>
+        <li>Included free with every registered company account</li>
+      </ul>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+        <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:rgba(58,207,232,.12);color:var(--slim);border:1px solid rgba(58,207,232,.3);padding:3px 10px;border-radius:20px;">Included with every account</span>
+      </div>
+      <span class="prod-link" style="color: var(--slim)">Learn more →</span>
+    </a>
+
+  </div>
+
+  <!-- SLIM included callout -->
+  <div class="slim-banner" style="margin-top:24px;">
+    <div class="slim-banner-icon">💡</div>
+    <p>
+      <strong>Click2SLIM is included automatically</strong> with every registered AXONTARA company account — at no additional cost. Compress and prepare your point clouds before every BIM or terrain modelling job.
+    </p>
+  </div>
+</section>
+
+
+<!-- ── HOW IT WORKS ── -->
+<section class="pipeline-section" id="how-it-works">
+  <div class="section-label">Click2BIM — How it works</div>
+
+  <h2>From scanner<br>to model in <em>five steps.</em></h2>
+  <p class="pipeline-intro">
+    A fully automated, AI-driven pipeline that turns raw LiDAR data into BIM-ready deliverables — without manual tracing.
+  </p>
+
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="step-num">01</div>
+      <div class="step-title">Scan &amp; Upload</div>
+      <p class="step-desc">Capture your building with a Leica, Faro, or compatible scanner. Upload the .e57, .las, or .laz file directly to the platform.</p>
+      <span class="step-tag">Any scanner</span>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">02</div>
+      <div class="step-title">SLIM Pre-process</div>
+      <p class="step-desc">Click2SLIM automatically compresses and optimises your point cloud — reducing file size up to 95% while preserving geometric fidelity.</p>
+      <span class="step-tag">Automatic</span>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">03</div>
+      <div class="step-title">AI Segmentation</div>
+      <p class="step-desc">Deep learning models classify every point: walls, floors, ceilings, structural elements, openings, MEP features — all labelled semantically.</p>
+      <span class="step-tag">AI-powered</span>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">04</div>
+      <div class="step-title">Parametric Extraction</div>
+      <p class="step-desc">Classified geometry is converted into fully parametric BIM objects — dimensions, materials, openings, and relationships built in.</p>
+      <span class="step-tag">LOD 300+</span>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">05</div>
+      <div class="step-title">QA &amp; Download</div>
+      <p class="step-desc">Deviation maps, clash reports, and export in IFC, DXF, DWG, RVT, or PLN. Your model is ready for design, FM, or coordination.</p>
+      <span class="step-tag">All formats</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── WHO ── -->
+<section class="markets-section" id="who">
+  <div class="section-label">Target markets</div>
+  <h2>Built for <em>professionals</em><br>who can't afford errors.</h2>
+  <p class="markets-intro">
+    AXONTARA tools are designed for B2B teams in the EU architecture, engineering, construction, and geospatial sectors — where quality, precision, and speed translate directly into margin.
+  </p>
+  <div class="who-grid">
+    <div class="who-card">
+      <div class="who-icon">🏛️</div>
+      <div class="who-title">Architecture Studios</div>
+      <p class="who-desc">Turn scan days into model days. As-built documentation, renovation design, and heritage projects — without the drafting marathon.</p>
+    </div>
+    <div class="who-card">
+      <div class="who-icon">⚙️</div>
+      <div class="who-title">BIM Managers</div>
+      <p class="who-desc">Consistent, standards-compliant IFC outputs without depending on individual modeller skill. Clash detection ready from day one.</p>
+    </div>
+    <div class="who-card">
+      <div class="who-icon">🏗️</div>
+      <div class="who-title">Design-Build Contractors</div>
+      <p class="who-desc">Compress your scan-to-model pipeline from weeks to hours. Better cost estimation, scheduling, and digital twin delivery.</p>
+    </div>
+    <div class="who-card">
+      <div class="who-icon">🔭</div>
+      <div class="who-title">Survey &amp; Scanning Firms</div>
+      <p class="who-desc">Offer BIM modelling as a service — without building an in-house modelling team. Click2BIM is your back-end delivery engine.</p>
+    </div>
+    <div class="who-card">
+      <div class="who-icon">🌍</div>
+      <div class="who-title">GIS &amp; Geospatial Firms</div>
+      <p class="who-desc">Georeferenced terrain models, infrastructure BIM, and GIS integration. Click2TERRA serves your consultancy and large-scale land projects.</p>
+    </div>
+    <div class="who-card">
+      <div class="who-icon">🏢</div>
+      <div class="who-title">FM &amp; Asset Owners</div>
+      <p class="who-desc">Accurate as-built models for facility management, renovation planning, and lifecycle asset intelligence — built from your existing scan data.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── FOUNDING 100 ── -->
+<section class="founding-section" id="founding">
+  <div class="founding-bg-num">100</div>
+  <div class="section-label" style="color:rgba(245,242,235,.4);">Founding Member Offer</div>
+
+  <div class="founding-inner">
+    <div>
+      <h2>Shape the<br>platform.<br><em>Own the rate.</em></h2>
+      <p style="margin-top: 20px;">
+        We're opening exactly 100 seats to the firms that will help define Click2BIM from the inside — before the world knows it exists. You get full platform access, direct influence on the roadmap, and pricing that will never be offered again.
+      </p>
+      <p style="margin-top: 16px;">
+        Founding members arrive at Alpha in April 2026 with <strong style="color:var(--accent)">€2,500 in matched processing credits</strong>, a permanent 50% rate discount, and the kind of institutional knowledge advantage that no later subscriber can replicate.
+      </p>
+
+      <div style="margin-top: 40px; display:flex; flex-direction:column; gap:14px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:28px;height:28px;background:rgba(200,245,66,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:13px;flex-shrink:0;">1</div>
+          <span style="color:rgba(245,242,235,.65);font-size:14px;">April 2026 — Alpha access opens for Founding 100</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:28px;height:28px;background:rgba(200,245,66,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:13px;flex-shrink:0;">2</div>
+          <span style="color:rgba(245,242,235,.65);font-size:14px;">Q4 2026 — Full platform launch, standard clients onboard</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:28px;height:28px;background:rgba(200,245,66,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:13px;flex-shrink:0;">3</div>
+          <span style="color:rgba(245,242,235,.65);font-size:14px;">2027+ — Your founding rate stays. Market pays full price.</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="offer-card">
+        <div class="offer-card-ribbon">FOUNDING 100</div>
+        <div class="price-block">
+          <div class="price-was">€500 setup fee — waived</div>
+          <div class="price-now">€2,500</div>
+          <div class="price-period">one-time founding fee · + €2,500 in matched credits</div>
+        </div>
+        <ul class="offer-features">
+          <li>€2,500 in matched processing credits (~10,000 m² at founding rates)</li>
+          <li>Permanent 50% discount on all processing bands — forever</li>
+          <li>€500 setup fee completely waived</li>
+          <li>Full Click2BIM platform access from Alpha day one</li>
+          <li>Click2SLIM included (all accounts)</li>
+          <li>Direct roadmap input and priority engineering access</li>
+          <li>Satisfaction guarantee — €1,250 returned as credits if unsatisfied at full release</li>
+        </ul>
+        <a href="https://www.click2bim.com/#apply" class="btn-offer">
+          Apply for a founding seat →
+        </a>
+        <div class="seats-note">100 seats · First-come, first-served · Currently open</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── ABOUT ── -->
+<section class="about-section section" id="about">
+  <div>
+    <div class="section-label">About AXONTARA</div>
+    <h2>Building the tools AEC <em>professionals</em> actually need.</h2>
+    <p>
+      AXONTARA is a Budapest-based SaaS company purpose-built for the European architecture, BIM, and geospatial markets. We combine deep domain expertise with applied AI to automate the most expensive, error-prone workflows in the industry.
+    </p>
+    <p>
+      Our Click2 platform suite is built by practitioners for practitioners — every feature shaped by real scan-to-BIM projects, real client deliverables, and the hard-won knowledge of what actually matters on the ground.
+    </p>
+    <div class="about-meta">
+      <div class="meta-item">
+        <div class="meta-value">€1.5B</div>
+        <div class="meta-label">EU market opportunity</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-value">350K+</div>
+        <div class="meta-label">Potential customers</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-value">3</div>
+        <div class="meta-label">Integrated platforms</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-value">2026</div>
+        <div class="meta-label">Full release year</div>
+      </div>
+    </div>
+  </div>
+  <div class="about-visual">
+    <div>
+      <div class="about-visual-text">Reality<br>→ BIM</div>
+      <div class="about-visual-sub">Budapest · EU · 2026</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">
+    <div class="dot"></div>
+    AXONTARA
+  </div>
+  <ul class="footer-links">
+    <li><a href="https://www.click2bim.com">Click2BIM</a></li>
+    <li><a href="https://www.click2terra.com">Click2TERRA</a></li>
+    <li><a href="#products">Click2SLIM</a></li>
+    <li><a href="https://www.click2bim.com/#founding">Founding 100</a></li>
+  </ul>
+  <div class="footer-note"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6900070f0629081106071d081b08470a0604">[email&#160;protected]</a> · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="432a2d252c03202f2a202871212a2e6d202c2e">[email&#160;protected]</a> · Budapest, Hungary</div>
+</footer>
+
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  /* scroll — fires for already-visible elements too */
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        io.unobserve(entry.targ
